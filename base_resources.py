@@ -80,10 +80,6 @@ class Agent:
         self.world = world
         self.initial_state = np.array(initialState)
         self.state = np.array(initialState)
-        
-    def reset(self):
-        # Resets agent to its initial state
-        self.state = np.array(self.initial_state)
 
     def move(self, state, action):
         # Gestiona las transiciones de estados
