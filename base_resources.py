@@ -48,9 +48,7 @@ def printPolicy(world, policy):
 
 
 ## Definición de la clase world
-
 class World:
-
     def __init__(self, size, terminal, obstacle, hole, catapult):
         # Crea un mundo
         self.size = size
@@ -75,11 +73,8 @@ class World:
                         self.map[(i, j)] = 3
 
 
-
 ## Definición de la clase Agent
-
 class Agent:
-
     def __init__(self, world, initialState):
         # Crea un agente
         self.world = world
@@ -143,7 +138,7 @@ class Agent:
     def executeAction(self, action):
         # Planifica y ejecuta una acción
         nextState = self.move(self.state, action)
-        if self.world.map[(self.state[0], self.state[1])] == -1:
+        if self.world.map[(nextState[0], nextState[1])] == -1:
             nextState = self.state
         else:
             self.state = nextState
@@ -152,8 +147,6 @@ class Agent:
     
 
 ## Definición de los mundos:
-
-
 # Mundo 1 pequeño: Laberinto fácil
 obstacles = []
 for j in range(0, 4):
