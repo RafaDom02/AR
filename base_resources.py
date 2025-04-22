@@ -30,7 +30,15 @@ def printPolicy(world, policy):
     p = ""
     for i in range(world.size[0]):
         for j in range(world.size[1]):
-            if policy[i][j] == 0:
+            if world.map[(i, j)] == -1:
+                p += " X "
+            elif world.map[(i, j)] == 1:
+                p += " F "
+            elif world.map[(i, j)] == 2:
+                p += " T "
+            elif world.map[(i, j)] == 3:
+                p += " C "
+            elif policy[i][j] == 0:
                 p += " ^ "
             elif policy[i][j] == 1:
                 p += " V "
@@ -136,6 +144,8 @@ class Agent:
         nextState = self.move(self.state, action)
         if self.world.map[(nextState[0], nextState[1])] == -1:
             nextState = self.state
+        elif self.world.map[(self.state[0], self.state[1])] == -1:
+            nextState = self.state  # Si mediante una catapulta cae en el agujero se queda atascado
         else:
             self.state = nextState
         reward = self.reward(nextState)

@@ -55,7 +55,7 @@ class MetodoBasadoEnValor(Agent):
             current_action = self.chooseAction(self.state)
             
             i = 0
-            while self.world.map[(self.state[0], self.state[1])] != 1 and i < max_iter:
+            while self.world.map[(self.state[0], self.state[1])] not in [1, -1] and i < max_iter:
                 # Execute action
                 current_state = self.state
                 next_state, current_reward = self.executeAction(self.actions[current_action])
