@@ -46,6 +46,8 @@ class MetodoBasadoEnValor(Agent):
         # Start training
         print(f"Starting training for {num_episodes} episodes.")
         start_time = time.time()
+    	
+        steps_per_episode = np.zeros(num_episodes)
 
         for episode in range(num_episodes):
             # Initialize the model
@@ -56,6 +58,8 @@ class MetodoBasadoEnValor(Agent):
             
             i = 0
             while self.world.map[(self.state[0], self.state[1])] not in [1, -1] and i < max_iter:
+                steps_per_episode[episode] += 1
+                
                 # Execute action
                 current_state = self.state
                 next_state, current_reward = self.executeAction(self.actions[current_action])
@@ -78,6 +82,8 @@ class MetodoBasadoEnValor(Agent):
         # Finish training
         end_time = time.time()
         print(f"Training finished in {end_time - start_time:.2f} seconds.")
+
+        return steps_per_episode
 
     def getPolicy(self):
         policy = np.zeros((self.world.size[0], 
