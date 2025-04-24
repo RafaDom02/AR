@@ -25,34 +25,43 @@ def printMap(world):
             m += "\n"
     print(m)
 
+# ANSI color codes
+BLUE = "\033[94m"
+RED = "\033[91m"
+RESET = "\033[0m"
+
 def printPolicy(world, policy):
-    # Visualiza la política con flechas
-    p = ""
     for i in range(world.size[0]):
+        row = ""
         for j in range(world.size[1]):
-            if world.map[(i, j)] == -1:
-                p += " X "
-            elif world.map[(i, j)] == 1:
-                p += " F "
-            elif world.map[(i, j)] == 2:
-                p += " T "
-            elif world.map[(i, j)] == 3:
-                p += " C "
-            elif policy[i][j] == 0:
-                p += " ^ "
-            elif policy[i][j] == 1:
-                p += " V "
-            elif policy[i][j] == 2:
-                p += " < "
-            elif policy[i][j] == 3:
-                p += " > "
+            cell = world.map[(i, j)]
+            if cell == -1:
+                row += " X "
+            elif cell == 1:
+                row += " F "
             else:
-                p += " x "
-        if i == world.size[0] - 1:
-            p += "\n"
-        else:
-            p += "\n"
-    print(p)
+                # flecha según política
+                if policy[i][j] == 0:
+                    arrow = '^'
+                elif policy[i][j] == 1:
+                    arrow = 'v'
+                elif policy[i][j] == 2:
+                    arrow = '<'
+                elif policy[i][j] == 3:
+                    arrow = '>'
+                else:
+                    arrow = 'x'
+
+                if cell == 2:
+                    # teleport: flecha en azul
+                    row += f" {BLUE}{arrow}{RESET} "
+                elif cell == 3:
+                    # catapulta: flecha en rojo
+                    row += f" {RED}{arrow}{RESET} "
+                else:
+                    # celda libre con flecha normal
+                    row += f" {arrow} "
+        print(row)
 
 
 ## Definición de la clase world
