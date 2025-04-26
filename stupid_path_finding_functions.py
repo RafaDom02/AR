@@ -70,7 +70,7 @@ class StupidAgent:
   
 
 class StupidMetodoBasadoEnValor(StupidAgent):
-    def __init__(self, world, initial_state, actions, alpha=0.1, gamma=0.9, epsilon=0.1):
+    def __init__(self, world, initial_state, actions, alpha=0.1, gamma=0.9, epsilon=0.1, random_init=False):
         super().__init__(world, initial_state)
         
         self.actions = actions
@@ -83,6 +83,7 @@ class StupidMetodoBasadoEnValor(StupidAgent):
         self.alpha = alpha      # Learning rate
         self.gamma = gamma      # Discount factor
         self.epsilon = epsilon  # Balance exploration and explotation factor
+        self.random_init = random_init 
 
     def updateValue(self, current_state, current_action, current_reward, next_state, next_action):
         raise Exception("updateValue() method not implemented.")
@@ -101,7 +102,7 @@ class StupidMetodoBasadoEnValor(StupidAgent):
 
             return random.choice(best_actions)
 
-    def train(self, num_episodes=1000, max_iter=99999):
+    def train(self, num_episodes=10000, max_iter=99999):
         # Initialize Q
         self.Q = np.zeros((self.world.size[0], 
                     self.world.size[1], 
@@ -113,7 +114,10 @@ class StupidMetodoBasadoEnValor(StupidAgent):
 
         for episode in range(num_episodes):
             # Initialize the model
-            self.state = self.initial_state
+            if self.random_init:
+                self.state = np.array([np.random.randint(0, self.world.size[0]), np.random.randint(0, self.world.size[1])])
+            else:
+                self.state = self.initial_state
 
             # Choose an action
             current_action = self.chooseAction(self.state)
@@ -155,8 +159,8 @@ class StupidMetodoBasadoEnValor(StupidAgent):
 
     
 class StupidSARSA(StupidMetodoBasadoEnValor):
-    def __init__(self, world, initial_state, actions, alpha=0.1, gamma=0.9, epsilon=0.1):
-        super().__init__(world, initial_state, actions, alpha, gamma, epsilon)
+    def __init__(self, world, initial_state, actions, alpha=0.1, gamma=0.9, epsilon=0.1, random_init=False):
+        super().__init__(world, initial_state, actions, alpha, gamma, epsilon, random_init)
 
     def updateValue(self, current_state, current_action, current_reward, next_state, next_action):
         current_Q = self.Q[current_state[0], current_state[1], current_action]
@@ -168,8 +172,8 @@ class StupidSARSA(StupidMetodoBasadoEnValor):
 
 
 class StupidQLearning(StupidMetodoBasadoEnValor):
-    def __init__(self, world, initial_state, actions, alpha=0.1, gamma=0.9, epsilon=0.1):
-        super().__init__(world, initial_state, actions, alpha, gamma, epsilon)
+    def __init__(self, world, initial_state, actions, alpha=0.1, gamma=0.9, epsilon=0.1, random_init=False):
+        super().__init__(world, initial_state, actions, alpha, gamma, epsilon, random_init)
 
     def updateValue(self, current_state, current_action, current_reward, next_state, next_action):
         current_Q = self.Q[current_state[0], current_state[1], current_action]
